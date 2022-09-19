@@ -11,18 +11,23 @@ export default async (
     );
     const htmlStringSwim = await responseSwim.text();
     const $ = cheerio.load(htmlStringSwim);
-    const searchSwimDates = `thead[data-target="equipments-timetables.tableHeader"]`;
+    const searchSwimDates = `th.paris-table-th.parts`;
     const searchSwimHours = `a[href=""]`;
-    const swimDate = $(searchSwimDates).text();
-
+    const swimDates: string[] = $(searchSwimDates)
+      .map((i, element) => {
+        return $(element).text().trim().toString();
+      })
+      .get();
+    console.log(swimDates);
     res.statusCode = 200;
     return res.json({
-      swimDate,
+      swimDates,
     });
   } catch (e) {
     // 5
-    res.statusCode = 404;
+    console.error(e);
+    res.statusCode = 500;
     // TODO better handling
-    return res.json({ message: "NOT FOUND" });
+    return res.json({ message: "ERROR" });
   }
 };
