@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 const Home: NextPage = () => {
   // TODO change any type
-  const [apiRes, setApiRes] = useState<ResponseTypeTODELETE[]>();
+  const [apiRes, setApiRes] = useState<ResponseTypeTODO>();
 
   useEffect(() => {
     fetch(`/api/events`)
@@ -26,8 +26,7 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
-        {apiRes &&
-          apiRes.map((res, index) => <a key={index}>{res.description}</a>)}
+        {apiRes && <a>{JSON.stringify(apiRes)}</a>}
       </main>
     </div>
   );

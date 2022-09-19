@@ -3,9 +3,4 @@ declare interface Event {
   endDate: string;
 }
 
-declare interface ResponseTypeTODELETE {
-  repository: string;
-  description: string;
-  language: string;
-  stars: string;
-}
+declare interface ResponseTypeTODO extends any {}
