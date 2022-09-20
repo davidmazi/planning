@@ -18,7 +18,6 @@ async function poolsScraping(): Promise<Activity[] | null> {
 
   // Hardcoded to only retrieve data-ids of Suzanne Berlioux=2916, Jacqueline Auriol=17349 and Bernard Lafay=2940
   const poolsDataIds = ["2916", "17349", "2940"];
-  // TODO use or change type Activity
   const mappedSwimSlots = poolsDataIds.flatMap((dataId) => {
     const searchSwimSlots = `tr[data-id=${dataId}] td.paris-table-td.parts`;
     const swimSlots: string[] = Array.from(
@@ -56,15 +55,17 @@ async function poolsScraping(): Promise<Activity[] | null> {
     );
 
     const activitiesArray: Activity[] = [];
-    for (let i = 0; i < swimmingDates.length / 2; i = i + 2) {
-      activitiesArray.push({
-        type: ActivityType.pool,
-        poolId: mappedSingleDaySwimSlots
-          ? Number(mappedSingleDaySwimSlots[0].pool)
-          : -1,
-        start: swimmingDates[i],
-        end: swimmingDates[i + 1],
-      });
+    if (swimmingDates) {
+      for (let i = 0; i < swimmingDates.length / 2; i = i + 2) {
+        activitiesArray.push({
+          type: ActivityType.pool,
+          poolId: mappedSingleDaySwimSlots
+            ? Number(mappedSingleDaySwimSlots[0].pool)
+            : -1,
+          start: swimmingDates[i],
+          end: swimmingDates[i + 1],
+        });
+      }
     }
     return activitiesArray;
   });
