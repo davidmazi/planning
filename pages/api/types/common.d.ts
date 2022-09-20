@@ -1,6 +1,12 @@
-declare interface Event {
-  startDate: string;
-  endDate: string;
+declare interface Activity {
+  start: Date;
+  end: Date;
 }
 
-declare interface ResponseTypeTODO extends any {}
+declare interface DateAndHour {
+  date: string;
+  hour: string;
+}
+
+declare interface ResponseTypeTODO extends any {
+}

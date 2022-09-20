@@ -1,15 +1,14 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import { useEffect, useState } from "react";
+import type {NextPage} from 'next';
+import Head from 'next/head';
+import styles from '../styles/Home.module.css';
+import {useEffect, useState} from 'react';
 
 const Home: NextPage = () => {
   // TODO change any type
   const [apiRes, setApiRes] = useState<ResponseTypeTODO>();
 
   useEffect(() => {
-    fetch(`/api/events`)
+    fetch(`/api/activities`)
       .then((res) => res.json())
       .then((res) => setApiRes(res));
   }, []);
@@ -23,7 +22,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        {apiRes && <a>{JSON.stringify(apiRes)}</a>}
+        {apiRes && <pre>{JSON.stringify(apiRes, undefined, 2)}</pre>}
       </main>
     </div>
   );
