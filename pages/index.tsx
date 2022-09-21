@@ -112,6 +112,8 @@ const Home: NextPage = () => {
                   );
                 }}
                 style={{
+                  event: {},
+                  box: {},
                   container: { width: "100vw", height: "95vh" },
                 }}
               />
