@@ -1,6 +1,6 @@
 interface BaseActivity {
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
 }
 
 export enum ActivityType {
