@@ -29,22 +29,29 @@ const Home: NextPage = () => {
   useEffect(() => {
     const mappedActivities: SchedulerExistingEvent[] = activities.map(
       (activity) => {
-        return {
-          from: DateTime.fromISO(activity.start).toJSDate(),
-          to: DateTime.fromISO(activity.end).toJSDate(),
-          name:
-            activity.type === ActivityType.pool
-              ? poolNames.find((poolName) => poolName.id === activity.poolId)
-                  ?.name || "No Name"
-              : "N/A",
-          calendar: { name: "", enabled: true },
-          repeat: 0,
-          is_current: false,
-        };
+        if (activity.type === ActivityType.pool)
+          return {
+            from: DateTime.fromISO(
+              new Date(activity.start).toISOString()
+            ).toJSDate(),
+            to: DateTime.fromISO(
+              new Date(activity.end).toISOString()
+            ).toJSDate(),
+            name:
+              poolNames.find((poolName) => poolName.id === activity.poolId)
+                ?.name || "No Name",
+            calendar: { name: "", enabled: true },
+            repeat: 0,
+            is_current: false,
+            style: {
+              filter: `hue-rotate(${Number(activity.poolId) * 10}deg)`,
+            },
+          };
       }
     );
     setEvents(mappedActivities);
   }, [activities]);
+
   return (
     <div>
       <Head>
@@ -53,22 +60,28 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
+      <main
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+        role="main"
+      >
         {events && events.length > 0 && (
           <Scheduler
             events={events}
             selected={selected}
             setSelected={setSelected}
+            onRequestAdd={(evt) => console.log(evt)}
+            onRequestEdit={(evt) => alert("Edit element requested")}
             style={{
-              container: { width: "100%" },
-              head: { width: "100vw" },
+              container: { width: "100%", height: "85vh" },
+              head: { width: "95%" },
               body: {
-                height: "100vh",
-                width: "100vw",
+                height: "100%",
+                width: "100%",
               },
             }}
-            onRequestAdd={(evt) => evt}
-            onRequestEdit={(evt) => alert("Edit element requested")}
           />
         )}
       </main>

@@ -60,8 +60,8 @@ async function poolsScraping(): Promise<Activity[] | null> {
           poolId: mappedSingleDaySwimSlots
             ? mappedSingleDaySwimSlots[0].pool
             : "",
-          start: swimmingDates[i],
-          end: swimmingDates[i + 1],
+          start: swimmingDates[i].toString(),
+          end: swimmingDates[i + 1].toString(),
         });
       }
     }
