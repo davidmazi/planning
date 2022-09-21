@@ -19,13 +19,13 @@ const MobileScheduler = dynamic(
 );
 
 const Home: NextPage = () => {
-  const [width, setWidth] = useState<number>();
+  const [mobileView, setMobileView] = useState<boolean>();
 
   useEffect(() => {
-    setWidth(window.innerWidth);
+    setMobileView(window.innerWidth > 800);
 
     function resize() {
-      setWidth(window.innerWidth);
+      setMobileView(window.innerWidth > 800);
     }
 
     window.addEventListener("resize", resize);
@@ -61,7 +61,10 @@ const Home: NextPage = () => {
           repeat: 0,
           is_current: false,
           style: {
-            filter: `hue-rotate(${Number(activity.poolId) * 10}deg)`,
+            backgroundImage: `url("/waves.svg")`,
+            backgroundPositionY: "bottom",
+            backgroundRepeat: "repeat-x",
+            filter: `hue-rotate(${Number(activity.poolId) * 0.56}deg)`,
           },
         });
       }
@@ -84,9 +87,9 @@ const Home: NextPage = () => {
         }}
         role="main"
       >
-        {events && events.length > 0 && width && (
+        {events && events.length > 0 && (
           <>
-            {width > 800 ? (
+            {mobileView ? (
               <Scheduler
                 editable={false}
                 events={events}
