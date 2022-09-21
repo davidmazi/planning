@@ -58,8 +58,8 @@ async function poolsScraping(): Promise<Activity[] | null> {
         activitiesArray.push({
           type: ActivityType.pool,
           poolId: mappedSingleDaySwimSlots
-            ? Number(mappedSingleDaySwimSlots[0].pool)
-            : -1,
+            ? mappedSingleDaySwimSlots[0].pool
+            : "",
           start: swimmingDates[i],
           end: swimmingDates[i + 1],
         });
