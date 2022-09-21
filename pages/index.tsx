@@ -52,14 +52,15 @@ const Home: NextPage = () => {
     const mappedActivities: SchedulerExistingEvent[] = [];
     activities.forEach((activity) => {
       if (activity.type === ActivityType.pool) {
+        const poolNameIndex = poolNames.findIndex(
+          (poolName) => poolName.id === activity.poolId
+        );
         mappedActivities.push({
           from: DateTime.fromISO(
             new Date(activity.start).toISOString()
           ).toJSDate(),
           to: DateTime.fromISO(new Date(activity.end).toISOString()).toJSDate(),
-          name:
-            poolNames.find((poolName) => poolName.id === activity.poolId)
-              ?.name || "No Name",
+          name: poolNames[poolNameIndex].name,
           calendar: { name: "", enabled: true },
           repeat: 0,
           is_current: false,
@@ -67,7 +68,7 @@ const Home: NextPage = () => {
             backgroundImage: `url("/waves.svg")`,
             backgroundPositionY: "bottom",
             backgroundRepeat: "repeat-x",
-            filter: `hue-rotate(${Number(activity.poolId) * 0.56}deg)`,
+            filter: `hue-rotate(${poolNameIndex * 30}deg)`,
           },
         });
       }
