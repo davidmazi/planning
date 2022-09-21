@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@cubedoodl/react-simple-scheduler": "^1.2.9",
     "cheerio": "^1.0.0-rc.12",
     "luxon": "^3.0.3",
     "next": "12.3.0",

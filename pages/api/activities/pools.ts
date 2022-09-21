@@ -1,6 +1,7 @@
+import { DateTime } from "luxon";
 import * as cheerio from "cheerio";
 import { Activity, ActivityType } from "../../../types/common.types";
-import { DateTime } from "luxon";
+import { poolsDataIds } from "../../../types/activities.types";
 
 async function poolsScraping(): Promise<Activity[] | null> {
   const responseSwim = await fetch(
@@ -17,7 +18,6 @@ async function poolsScraping(): Promise<Activity[] | null> {
     .get();
 
   // Hardcoded to only retrieve data-ids of Suzanne Berlioux=2916, Jacqueline Auriol=17349 and Bernard Lafay=2940
-  const poolsDataIds = ["2916", "17349", "2940"];
   const mappedSwimSlots = poolsDataIds.flatMap((dataId) => {
     const searchSwimSlots = `tr[data-id=${dataId}] td.paris-table-td.parts`;
     const swimSlots: string[] = Array.from(
@@ -47,9 +47,7 @@ async function poolsScraping(): Promise<Activity[] | null> {
             .split(".")[1]
             .trim();
           const dateString = `${formattedSwimDate}/${new Date().getFullYear()} ${swimSlot}`;
-          return DateTime.fromFormat(dateString, "dd/MM/yyyy hh:mm", {
-            locale: "fr",
-          }).toJSDate();
+          return DateTime.fromFormat(dateString, "dd/MM/yyyy hh:mm").toJSDate();
         });
       }
     );

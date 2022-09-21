@@ -2,17 +2,57 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { useEffect, useState } from "react";
+import { Activity, ActivityType } from "../types/common.types";
+import dynamic from "next/dynamic";
+import { poolNames } from "../types/activities.types";
+import { SchedulerExistingEvent } from "@cubedoodl/react-simple-scheduler/dist/types/types";
+
+const MobileScheduler = dynamic(
+  () =>
+    import("@cubedoodl/react-simple-scheduler").then((a) => a.MobileScheduler),
+  { ssr: false }
+);
+const Calendar = dynamic(
+  () => import("@cubedoodl/react-simple-scheduler").then((a) => a.Calendar),
+  { ssr: false }
+);
+const Scheduler = dynamic(
+  () => import("@cubedoodl/react-simple-scheduler").then((a) => a.Scheduler),
+  { ssr: false }
+);
 
 const Home: NextPage = () => {
-  // TODO change any type
-  const [apiRes, setApiRes] = useState<ResponseTypeTODO>();
+  const [selected, setSelected] = useState(new Date());
 
+  const [activities, setActivities] = useState<Activity[]>([]);
+
+  // Retrieve activities from API
   useEffect(() => {
     fetch("/api/activities")
       .then((res) => res.json())
-      .then((res) => setApiRes(res));
+      .then((res) => setActivities(res));
   }, []);
 
+  const [events, setEvents] = useState<SchedulerExistingEvent[]>();
+
+  // Map activities to events
+  useEffect(() => {
+    const mappedActivities: SchedulerExistingEvent[] = activities.map(
+      (activity) => ({
+        from: activity.start,
+        to: activity.end,
+        name:
+          activity.type === ActivityType.pool
+            ? poolNames.find((poolName) => poolName.id === activity.poolId)
+                ?.name || "No Name"
+            : "N/A",
+        calendar: { name: "Swimming", enabled: true },
+        repeat: 0,
+        is_current: false,
+      })
+    );
+    setEvents(mappedActivities);
+  }, [activities]);
   return (
     <div className={styles.container}>
       <Head>
@@ -22,7 +62,28 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        {apiRes && <pre>{JSON.stringify(apiRes, undefined, 2)}</pre>}
+        <div
+        // TODO finetune disable of calendar clicks
+        // style={{ pointerEvents: "none" }}
+        >
+          {events && events.length > 0 && (
+            // <MobileScheduler
+            //   events={events}
+            //   onRequestEdit={(evt) => alert("Edit element requested")}
+            // />
+            <>
+              <Calendar selected={selected} setSelected={setSelected} />
+
+              <Scheduler
+                events={events}
+                selected={selected}
+                setSelected={setSelected}
+                onRequestAdd={(evt) => evt}
+                onRequestEdit={(evt) => alert("Edit element requested")}
+              />
+            </>
+          )}
+        </div>
       </main>
     </div>
   );

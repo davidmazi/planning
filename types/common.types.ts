@@ -11,7 +11,7 @@ export enum ActivityType {
 
 export type Activity = BaseActivity &
   (
-    | { type: ActivityType.pool; poolId: number }
+    | { type: ActivityType.pool; poolId: string }
     | { type: ActivityType.rock }
     | { type: ActivityType.climb }
   );
