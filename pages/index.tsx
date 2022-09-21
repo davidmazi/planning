@@ -4,7 +4,10 @@ import { useEffect, useState } from "react";
 import { Activity, ActivityType } from "../types/common.types";
 import dynamic from "next/dynamic";
 import { poolNames } from "../types/activities.types";
-import { SchedulerExistingEvent } from "@cubedoodl/react-simple-scheduler/dist/types/types";
+import {
+  SchedulerEvent,
+  SchedulerExistingEvent,
+} from "@cubedoodl/react-simple-scheduler/dist/types/types";
 import { DateTime } from "luxon";
 
 const Scheduler = dynamic(
@@ -72,6 +75,18 @@ const Home: NextPage = () => {
     setEvents(mappedActivities);
   }, [activities]);
 
+  function alertForEvent(evt?: SchedulerEvent) {
+    if (evt) {
+      const eventName = Object.hasOwn(evt, "name")
+        ? (evt as SchedulerExistingEvent)["name"]
+        : "N/A";
+      alert(
+        `${eventName}
+The ${evt.from.toLocaleDateString()} from ${evt.from.toLocaleTimeString()} to ${evt.to.toLocaleTimeString()}`
+      );
+    }
+  }
+
   return (
     <div>
       <Head>
@@ -80,13 +95,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-        role="main"
-      >
+      <main role="main">
         {events && events.length > 0 && (
           <>
             {mobileView ? (
@@ -95,8 +104,8 @@ const Home: NextPage = () => {
                 events={events}
                 selected={selected}
                 setSelected={setSelected}
-                onRequestAdd={(evt) => console.log(evt)}
-                onRequestEdit={(evt) => alert("Edit element requested")}
+                onRequestAdd={(evt) => alert(`Can't add event`)}
+                onRequestEdit={(evt) => alertForEvent(evt)}
                 style={{
                   container: { width: "100%", height: "85vh" },
                   head: { width: "95%" },
@@ -109,11 +118,7 @@ const Home: NextPage = () => {
             ) : (
               <MobileScheduler
                 events={events}
-                onRequestEdit={(evt) => {
-                  alert(
-                    `You clicked an event from ${evt.from.toLocaleDateString()} @ ${evt.from.toLocaleTimeString()} until ${evt.to.toLocaleDateString()} @ ${evt.to.toLocaleTimeString()}`
-                  );
-                }}
+                onRequestEdit={(evt) => alertForEvent(evt)}
                 style={{
                   event: {},
                   box: {},
