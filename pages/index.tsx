@@ -12,7 +12,26 @@ const Scheduler = dynamic(
   { ssr: false }
 );
 
+const MobileScheduler = dynamic(
+  () =>
+    import("@cubedoodl/react-simple-scheduler").then((a) => a.MobileScheduler),
+  { ssr: false }
+);
+
 const Home: NextPage = () => {
+  const [width, setWidth] = useState<number>();
+
+  useEffect(() => {
+    setWidth(window.innerWidth);
+
+    function resize() {
+      setWidth(window.innerWidth);
+    }
+
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
+  }, []);
+
   const [selected, setSelected] = useState(new Date());
   const [activities, setActivities] = useState<Activity[]>([]);
 
@@ -29,7 +48,6 @@ const Home: NextPage = () => {
   useEffect(() => {
     const mappedActivities: SchedulerExistingEvent[] = [];
     activities.forEach((activity) => {
-      console.log(activity);
       if (activity.type === ActivityType.pool) {
         mappedActivities.push({
           from: DateTime.fromISO(
@@ -66,23 +84,39 @@ const Home: NextPage = () => {
         }}
         role="main"
       >
-        {events && events.length > 0 && (
-          <Scheduler
-            editable={false}
-            events={events}
-            selected={selected}
-            setSelected={setSelected}
-            onRequestAdd={(evt) => console.log(evt)}
-            onRequestEdit={(evt) => alert("Edit element requested")}
-            style={{
-              container: { width: "100%", height: "85vh" },
-              head: { width: "95%" },
-              body: {
-                height: "100%",
-                width: "100%",
-              },
-            }}
-          />
+        {events && events.length > 0 && width && (
+          <>
+            {width > 800 ? (
+              <Scheduler
+                editable={false}
+                events={events}
+                selected={selected}
+                setSelected={setSelected}
+                onRequestAdd={(evt) => console.log(evt)}
+                onRequestEdit={(evt) => alert("Edit element requested")}
+                style={{
+                  container: { width: "100%", height: "85vh" },
+                  head: { width: "95%" },
+                  body: {
+                    height: "100%",
+                    width: "100%",
+                  },
+                }}
+              />
+            ) : (
+              <MobileScheduler
+                events={events}
+                onRequestEdit={(evt) => {
+                  alert(
+                    `You clicked an event from ${evt.from.toLocaleDateString()} @ ${evt.from.toLocaleTimeString()} until ${evt.to.toLocaleDateString()} @ ${evt.to.toLocaleTimeString()}`
+                  );
+                }}
+                style={{
+                  container: { width: "100vw", height: "95vh" },
+                }}
+              />
+            )}
+          </>
         )}
       </main>
     </div>

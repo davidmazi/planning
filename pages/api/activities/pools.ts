@@ -54,7 +54,7 @@ async function poolsScraping(): Promise<Activity[] | null> {
 
     const activitiesArray: Activity[] = [];
     if (swimmingDates) {
-      for (let i = 0; i < swimmingDates.length / 2; i = i + 2) {
+      for (let i = 0; i <= swimmingDates.length / 2; i = i + 2) {
         activitiesArray.push({
           type: ActivityType.pool,
           poolId: mappedSingleDaySwimSlots
