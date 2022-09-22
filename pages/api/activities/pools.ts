@@ -47,7 +47,9 @@ async function poolsScraping(): Promise<Activity[] | null> {
             .split(".")[1]
             .trim();
           const dateString = `${formattedSwimDate}/${new Date().getFullYear()} ${swimSlot}`;
-          return DateTime.fromFormat(dateString, "dd/MM/yyyy hh:mm").toJSDate();
+          return DateTime.fromFormat(dateString, "dd/MM/yyyy hh:mm", {
+            zone: "Europe/Paris",
+          }).toJSDate();
         });
       }
     );
