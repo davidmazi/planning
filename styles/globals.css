@@ -2,8 +2,3 @@ main {
     display: flex;
     justify-content: space-between;
 }
-
-.react-simple-mobile-scheduler .event:not(:only-child) {
-    border-top: 5px #9fddf1 dotted;
-    padding-top: 5px;
-}

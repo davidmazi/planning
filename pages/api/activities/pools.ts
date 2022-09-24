@@ -1,8 +1,9 @@
 import { DateTime } from "luxon";
 import * as cheerio from "cheerio";
 import { Activity, ActivityType } from "../../../types/common.types";
-import { poolsDataIds } from "../../../types/activities.types";
+import { poolNames } from "../../../types/activities.types";
 
+// TODO see if there is an improvement by making this a dedicated endpoint, and Promise.racing all different sources to prevent loading
 async function poolsScraping(): Promise<Activity[] | null> {
   const responseSwim = await fetch(
     `https://www.paris.fr/lieux/piscines/tous-les-horaires`
@@ -18,8 +19,8 @@ async function poolsScraping(): Promise<Activity[] | null> {
     .get();
 
   // Hardcoded to only retrieve data-ids of Suzanne Berlioux=2916, Jacqueline Auriol=17349 and Bernard Lafay=2940
-  const mappedSwimSlots = poolsDataIds.flatMap((dataId) => {
-    const searchSwimSlots = `tr[data-id=${dataId}] td.paris-table-td.parts`;
+  const mappedSwimSlots = poolNames.flatMap(({ id }) => {
+    const searchSwimSlots = `tr[data-id=${id}] td.paris-table-td.parts`;
     const swimSlots: string[] = Array.from(
       $(searchSwimSlots)
         .map((i, element) => {
@@ -32,7 +33,7 @@ async function poolsScraping(): Promise<Activity[] | null> {
       return swimSlot
         .match(/\d{1,2}:\d{2}\sà\s\d{1,2}:\d{2}/gm)
         ?.map((matchedSwimSlot) => ({
-          pool: dataId,
+          pool: id,
           swimDate: swimDates[swimSlotIndex],
           swimSlot: matchedSwimSlot,
         }));
@@ -55,8 +56,9 @@ async function poolsScraping(): Promise<Activity[] | null> {
     );
 
     const activitiesArray: Activity[] = [];
+    // Final mapping of swimming dates
     if (swimmingDates) {
-      for (let i = 0; i <= swimmingDates.length / 2; i = i + 2) {
+      for (let i = 0; i < swimmingDates.length; i = i + 2) {
         activitiesArray.push({
           type: ActivityType.pool,
           poolId: mappedSingleDaySwimSlots

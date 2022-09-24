@@ -11,7 +11,6 @@ export default async (
     // const activitiesPromises = activitiesEndpoints.map((endpoint) =>
     // );
     res.statusCode = 200;
-
     return res.json(test);
   } catch (e) {
     console.error(e);
