@@ -11,6 +11,16 @@
     {
       "src": "favicon.ico",
       "type": "image/png"
+    },
+    {
+      "src": "favicon.ico",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "favicon.ico",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
   "splash_pages": null
