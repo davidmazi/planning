@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import {
   SchedulerEvent,
-  SchedulerExistingEvent,
+  SchedulerExistingEvent
 } from "@cubedoodl/react-simple-scheduler/dist/types/types";
 import dynamic from "next/dynamic";
 
@@ -57,23 +57,20 @@ The ${evt.from.toLocaleDateString()} from ${evt.from.toLocaleTimeString()} to ${
           onRequestAdd={(evt) => alert(`Can't add event`)}
           onRequestEdit={(evt) => alertForEvent(evt)}
           style={{
-            container: { width: "100%", height: "85vh" },
+            container: {
+              width: "100%", height: "85vh"
+            },
             head: { width: "95%" },
             body: {
               height: "100%",
-              width: "100%",
-            },
+              width: "100%"
+            }
           }}
         />
       ) : (
         <MobileScheduler
           events={events}
           onRequestEdit={(evt) => alertForEvent(evt)}
-          style={{
-            event: {},
-            box: {},
-            container: { width: "100vw", height: "95vh" },
-          }}
         />
       )}
     </>

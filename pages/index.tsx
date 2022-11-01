@@ -46,8 +46,8 @@ const Home: NextPage = () => {
                 backgroundImage: `url("/waves.svg")`,
                 backgroundPositionY: "bottom",
                 backgroundRepeat: "repeat-x",
-                filter: `hue-rotate(${poolNameIndex * 30}deg)`,
-              },
+                filter: `hue-rotate(${poolNameIndex * 30}deg)`
+              }
             });
           }
         });
