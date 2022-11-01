@@ -1,0 +1,17 @@
+{
+  "name": "Planning App",
+  "short_name": "Planning",
+  "theme_color": "#818181",
+  "background_color": "#212124",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "type": "image/png"
+    }
+  ],
+  "splash_pages": null
+}
