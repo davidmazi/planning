@@ -3,15 +3,19 @@ interface BaseActivity {
   end: string;
 }
 
-export enum ActivityType {
+export enum ActivityTypeEnum {
   pool,
   rock,
   climb,
 }
 
+export type ApiResponseError = {
+  error: string;
+};
+
 export type Activity = BaseActivity &
   (
-    | { type: ActivityType.pool; poolId: string }
-    | { type: ActivityType.rock }
-    | { type: ActivityType.climb }
+    | { type: ActivityTypeEnum.pool; poolId: string }
+    | { type: ActivityTypeEnum.rock }
+    | { type: ActivityTypeEnum.climb }
   );
