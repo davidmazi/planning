@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import * as cheerio from "cheerio";
-import { Activity, ActivityType } from "../../../types/common.types";
-import { poolNames } from "../../../types/activities.types";
+import { Activity, ActivityTypeEnum } from "../types/common.types";
+import { poolNames } from "./types/activities.types";
 
 // TODO see if there is an improvement by making this a dedicated endpoint, and Promise.racing all different sources to prevent loading
 async function poolsScraping(): Promise<Activity[] | null> {
@@ -60,7 +60,7 @@ async function poolsScraping(): Promise<Activity[] | null> {
     if (swimmingDates) {
       for (let i = 0; i < swimmingDates.length; i = i + 2) {
         activitiesArray.push({
-          type: ActivityType.pool,
+          type: ActivityTypeEnum.pool,
           poolId: mappedSingleDaySwimSlots
             ? mappedSingleDaySwimSlots[0].pool
             : "",

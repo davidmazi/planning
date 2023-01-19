@@ -1,12 +1,11 @@
 import type { NextPage } from "next";
-import Head from "next/head";
 import { useEffect, useState } from "react";
-import { Activity, ActivityType } from "../types/common.types";
-import { poolNames } from "../types/activities.types";
+import { Activity, ActivityTypeEnum } from "../types/common.types";
+import { poolNames } from "../scraping/types/activities.types";
 import { SchedulerExistingEvent } from "@cubedoodl/react-simple-scheduler/dist/types/types";
 import { DateTime } from "luxon";
-import TimeTable from "../components/TimeTable";
-import FilterSelect from "../components/FilterSelect";
+import TimeTable from "../components/common/TimeTable";
+import FilterSelect from "../components/common/FilterSelect";
 
 const Home: NextPage = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -27,7 +26,7 @@ const Home: NextPage = () => {
       const mappedActivities: SchedulerExistingEvent[] = [];
       if (activities.length > 0)
         activities.forEach((activity) => {
-          if (activity.type === ActivityType.pool) {
+          if (activity.type === ActivityTypeEnum.pool) {
             const poolNameIndex = poolNames.findIndex(
               (poolName) => poolName.id === activity.poolId
             );
@@ -46,8 +45,8 @@ const Home: NextPage = () => {
                 backgroundImage: `url("/waves.svg")`,
                 backgroundPositionY: "bottom",
                 backgroundRepeat: "repeat-x",
-                filter: `hue-rotate(${poolNameIndex * 30}deg)`
-              }
+                filter: `hue-rotate(${poolNameIndex * 30}deg)`,
+              },
             });
           }
         });
@@ -62,12 +61,6 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <Head>
-        <title>Planning App</title>
-        <meta name="description" content="Timetable TimeTable App" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main role="main">
         {events && events.length > 0 && (
           <>
